@@ -49,7 +49,7 @@ const CustomModal = ({
     console.log('here')
     const selectedFile = e.target.files[0];
     setFilePreview(URL.createObjectURL(e.target.files[0]));
-    console.log(selectedFile)
+    // console.log(selectedFile)
     setExpPic(selectedFile);
     console.log(expPic);
   };
@@ -66,7 +66,7 @@ const CustomModal = ({
         body: formData,
       }
     );
-    console.log(resp);
+    console.log({ resp });
   }
 
   const postExperience = async (newExp) => {
