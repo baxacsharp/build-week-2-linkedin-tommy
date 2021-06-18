@@ -32,20 +32,33 @@ const CustomModal = ({
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState(initialFields);
   const [expPic, setExpPic] = useState(null);
+  // const [selectedFile, setField] = useState(null)
+  // const [pic, setPic] = useState(null)
   const [filePreview, setFilePreview] = useState(null);
+
+
+  // const newHandleFile = e => {
+  //   const file = e.target.files[0]
+  //   console.log(file)
+  //   setPic(file)
+  //   console.log(pic)
+  // }
 
   // file upload
   const handleFileChange = (e) => {
+    console.log('here')
     const selectedFile = e.target.files[0];
     setFilePreview(URL.createObjectURL(e.target.files[0]));
-
+    console.log(selectedFile)
     setExpPic(selectedFile);
-    // console.log(expPic);
+    console.log(expPic);
   };
+
+
 
   const uploadPic = async (profileId, experienceID) => {
     const formData = new FormData();
-    formData.append('picture', expPic, expPic.name);
+    formData.append('experienceImage', expPic);
     const resp = await fetch(
       `${process.env.REACT_APP_API_URL}/profile/${profileId}/experience/${experienceID}/picture`,
       {
@@ -54,9 +67,10 @@ const CustomModal = ({
       }
     );
     console.log(resp);
-  };
+  }
 
   const postExperience = async (newExp) => {
+    console.log(expPic)
     setLoading(true);
     const resp = await fetch(
       `${process.env.REACT_APP_API_URL}/profile/${user.id}/experience`,
@@ -73,14 +87,14 @@ const CustomModal = ({
     setLoading(false);
     setFields(initialFields);
     console.log(body);
-    window.location.reload()
+    // window.location.reload()
     // aspetto che finisca di caricare e poi fetcho
     if (expPic) {
       await uploadPic(body.profileId, body.id);
-      fetchExperiences(user.id);
+      fetchExperiences(profileId);
       setExpPic(null);
     } else {
-      fetchExperiences(user.id);
+      fetchExperiences(profileId);
     }
   };
 
@@ -107,7 +121,7 @@ const CustomModal = ({
     } else {
       fetchExperiences(body.profileId);
     }
-    window.location.reload()
+    // window.location.reload()
   };
 
   const handleSubmit = () => {
@@ -205,7 +219,7 @@ const CustomModal = ({
                 value={fields.endDate}
                 type='date'
               />
-              <input onChange={handleFileChange} name='imageUrl' value={fields.image} className='d-block' />
+
               <input type='file' onChange={handleFileChange} className='my-3' />
               <Image fluid src={filePreview} />
               {/* <Image fluid src={filePreview} /> */}
